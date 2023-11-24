@@ -9,9 +9,11 @@ from main.plugins.pyroplug import get_msg
 from main.plugins.helpers import get_link, join, screenshot
 
 from telethon import events
+from telethon.errors.rpcerrorlist import UserNotParticipantError
+from telethon.tl.functions.channels import GetParticipantRequest
 from pyrogram.errors import FloodWait
 
-from ethon.telefunc import force_sub
+#from ethon.telefunc import force_sub
 
 ft = f"To use this bot you've to join @{fs}."
 
@@ -24,6 +26,22 @@ user=[]
 # To-Do:
 # Make these codes shorter and clean
 # ofc will never do it. 
+
+#Forcesub
+async def force_sub(client, channel, id, ft):
+    s, r = False, None
+    try:
+        x = await client(GetParticipantRequest(channel=channel, participant=int(id)))
+        left = x.stringify()
+        if 'left' in left:
+            s, r = True, f"{ft}\n\nThanks for Support🍻"
+        else:
+            s, r = False, None
+    except UserNotParticipantError:
+        s, r = True, f"To use this bot you've to join @{channel}.\n\nThanks for Support🍻"
+    except Exception:
+        s, r = True, "ERROR: Add in ForceSub channel, or check your channel id."
+    return s, r
 
 @Drone.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def clone(event):
