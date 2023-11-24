@@ -45,5 +45,9 @@ async def remt(event):
 @Drone.on(events.NewMessage(incoming=True, pattern=f"{S}"))
 async def start(event):
     text = "Send me Link of any message to clone it here, For private channel message, send invite link first.\n\n**SUPPORT:** @Xproject13"
-    await start_srb(event, text)
+    await event.reply(text, 
+                      buttons=[
+                              [Button.inline("⚙️Set Thumb.", data="set"),
+                               Button.inline("🗑Rem Thumb.", data="rem")],
+                              [Button.url("💡 JOIN 💡", url="t.me/xproject13")]])
     
